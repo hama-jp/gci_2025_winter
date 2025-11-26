@@ -69,6 +69,9 @@ def load_and_clean_data(verbose=True):
             count = 0
     df['consecutive_closed_before'] = consecutive_closed
 
+    # 3日以上の連休明けフラグ（通常週末2日を除く本当の連休明け）
+    df['is_after_long_holiday'] = (df['consecutive_closed_before'] >= 3).astype(int)
+
     if verbose:
         print(f"\n【連続休業日数（休日明け特徴量）】")
         # 営業日のみで集計
@@ -77,6 +80,9 @@ def load_and_clean_data(verbose=True):
         print(f"  分布（営業日のみ）:")
         for days, count in dist.head(10).items():
             print(f"    {days}日連休明け: {count}日")
+
+        long_holiday_count = df.loc[business_mask, 'is_after_long_holiday'].sum()
+        print(f"  3日以上の連休明け: {long_holiday_count}日")
 
     # =================================================================
     # 3. 営業日データの抽出
@@ -172,7 +178,7 @@ def create_features_for_prediction(df, forecast_horizon):
     # 使用する特徴量カラム
     feature_cols = [
         'dow', 'month', 'day', 'week_of_year',
-        'cm_flg', 'day_before_holiday_flag', 'consecutive_closed_before',
+        'cm_flg', 'day_before_holiday_flag', 'is_after_long_holiday',
         f'call_lag_{forecast_horizon}', f'call_lag_{forecast_horizon+1}',
         f'call_lag_{forecast_horizon+2}', f'call_lag_{forecast_horizon+3}',
         f'call_lag_{forecast_horizon+4}',
