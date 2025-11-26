@@ -49,9 +49,9 @@ def weekly_backtest(df, n_weeks=30):
 
     unique_weeks = sorted(df['year_week'].unique())
 
-    # 予測対象の各曜日に対応するホライズン
-    # 水曜(dow=3)から: 月(dow=1)=5日先, 火=6日先, ...
-    horizons = {1: 5, 2: 6, 3: 7, 4: 8, 5: 9}
+    # 予測対象の各曜日に対応するホライズン（営業日ベース）
+    # 水曜の実績を使うため: 月=3営業日先, 火=4, 水=5, 木=6, 金=7
+    horizons = {1: 3, 2: 4, 3: 5, 4: 6, 5: 7}
 
     start_idx = 10
 
