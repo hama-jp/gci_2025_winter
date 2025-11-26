@@ -10,7 +10,8 @@
 import pandas as pd
 import numpy as np
 
-DATA_DIR = "/home/user/gci_2025_winter/AirREGI"
+BASE_DIR = "/home/user/gci_2025_winter/AirREGI"
+PROCESSED_DATA_DIR = f"{BASE_DIR}/data/processed"
 
 
 def load_and_clean_data(verbose=True):
@@ -30,7 +31,7 @@ def load_and_clean_data(verbose=True):
         print("=" * 70)
 
     # データ読み込み
-    df = pd.read_csv(f"{DATA_DIR}/merged_call_data_numeric.csv")
+    df = pd.read_csv(f"{PROCESSED_DATA_DIR}/merged_call_data_numeric.csv")
     df['cdr_date'] = pd.to_datetime(df['cdr_date'])
     df = df.sort_values('cdr_date').reset_index(drop=True)
 
@@ -172,12 +173,12 @@ if __name__ == "__main__":
     df_all, df_business = load_and_clean_data(verbose=True)
 
     # クリーニング済みデータを保存
-    output_path = f"{DATA_DIR}/cleaned_data.csv"
+    output_path = f"{PROCESSED_DATA_DIR}/cleaned_data.csv"
     df_all.to_csv(output_path, index=False)
     print(f"\n【保存】")
     print(f"  クリーニング済みデータ: {output_path}")
 
-    output_path_business = f"{DATA_DIR}/business_days_data.csv"
+    output_path_business = f"{PROCESSED_DATA_DIR}/business_days_data.csv"
     df_business.to_csv(output_path_business, index=False)
     print(f"  営業日データ: {output_path_business}")
 

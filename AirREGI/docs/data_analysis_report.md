@@ -215,16 +215,30 @@ GradientBoostingRegressor(n_estimators=100, max_depth=5)
 
 **知見**: 直近のコール件数実績とアカウント取得数が予測に最も有効。
 
-## 8. 生成ファイル
+## 8. ディレクトリ構造
 
-| ファイル | 説明 |
-|----------|------|
-| `prepare_data.py` | データ準備スクリプト |
-| `merged_call_data.csv` | マージ済みデータ |
-| `merged_call_data_numeric.csv` | フラグを数値化版 |
-| `data_cleaning.py` | データクリーニングモジュール |
-| `cleaned_data.csv` | クリーニング済みデータ |
-| `business_days_data.csv` | 営業日のみのデータ |
-| `forecast_with_cleaned_data.py` | 予測検証スクリプト |
-| `weekly_backtest_cleaned.csv` | 週次予測バックテスト結果 |
-| `monthly_backtest_cleaned.csv` | 月次予測バックテスト結果 |
+```
+AirREGI/
+├── data/
+│   ├── raw/                          # 元データ
+│   │   ├── regi_call_data_transform.csv
+│   │   ├── regi_acc_get_data_transform.csv
+│   │   ├── calender_data.csv
+│   │   ├── cm_data.csv
+│   │   └── gt_service_name.csv
+│   └── processed/                    # 処理済みデータ
+│       ├── merged_call_data_numeric.csv
+│       ├── cleaned_data.csv
+│       └── business_days_data.csv
+├── src/                              # ソースコード
+│   ├── prepare_data.py               # データ準備スクリプト
+│   ├── data_cleaning.py              # データクリーニングモジュール
+│   └── forecast_with_cleaned_data.py # 予測検証スクリプト
+├── results/                          # 実験結果
+│   ├── weekly_backtest_cleaned.csv
+│   ├── monthly_backtest_cleaned.csv
+│   ├── weekly_predictions_cleaned.csv
+│   └── monthly_predictions_cleaned.csv
+└── docs/                             # ドキュメント
+    └── data_analysis_report.md
+```
