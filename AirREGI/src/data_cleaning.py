@@ -56,7 +56,30 @@ def load_and_clean_data(verbose=True):
         print(f"  平日だが休業: {only_closed}日")
 
     # =================================================================
-    # 2. 営業日データの抽出
+    # 2. 連続休業日数の計算（休日明け特徴量用）
+    # =================================================================
+    # 各日の直前に何日連続で休業だったかを計算
+    consecutive_closed = []
+    count = 0
+    for i, row in df.iterrows():
+        consecutive_closed.append(count)
+        if row['closed_flag'] == 1:
+            count += 1
+        else:
+            count = 0
+    df['consecutive_closed_before'] = consecutive_closed
+
+    if verbose:
+        print(f"\n【連続休業日数（休日明け特徴量）】")
+        # 営業日のみで集計
+        business_mask = df['closed_flag'] == 0
+        dist = df.loc[business_mask, 'consecutive_closed_before'].value_counts().sort_index()
+        print(f"  分布（営業日のみ）:")
+        for days, count in dist.head(10).items():
+            print(f"    {days}日連休明け: {count}日")
+
+    # =================================================================
+    # 3. 営業日データの抽出
     # =================================================================
     df_business = df[df['closed_flag'] == 0].copy()
     df_business = df_business.reset_index(drop=True)
@@ -74,7 +97,7 @@ def load_and_clean_data(verbose=True):
             print(f"    {dow_names[dow]}曜日: {count}日")
 
     # =================================================================
-    # 3. 異常値の確認
+    # 4. 異常値の確認
     # =================================================================
     if verbose:
         print(f"\n【営業日コール件数の統計】")
@@ -149,7 +172,7 @@ def create_features_for_prediction(df, forecast_horizon):
     # 使用する特徴量カラム
     feature_cols = [
         'dow', 'month', 'day', 'week_of_year',
-        'cm_flg', 'day_before_holiday_flag',
+        'cm_flg', 'day_before_holiday_flag', 'consecutive_closed_before',
         f'call_lag_{forecast_horizon}', f'call_lag_{forecast_horizon+1}',
         f'call_lag_{forecast_horizon+2}', f'call_lag_{forecast_horizon+3}',
         f'call_lag_{forecast_horizon+4}',
