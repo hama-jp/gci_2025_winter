@@ -17,7 +17,8 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 # データクリーニングモジュールをインポート
 from data_cleaning import load_and_clean_data, create_features_for_prediction
 
-DATA_DIR = "/home/user/gci_2025_winter/AirREGI"
+BASE_DIR = "/home/user/gci_2025_winter/AirREGI"
+RESULTS_DIR = f"{BASE_DIR}/results"
 
 print("=" * 70)
 print("コール件数予測 - クリーニング済みデータ版")
@@ -290,10 +291,10 @@ print(f"""
 """)
 
 # 結果保存
-weekly_results.to_csv(f"{DATA_DIR}/weekly_backtest_cleaned.csv", index=False)
-monthly_results.to_csv(f"{DATA_DIR}/monthly_backtest_cleaned.csv", index=False)
-weekly_predictions.to_csv(f"{DATA_DIR}/weekly_predictions_cleaned.csv", index=False)
-monthly_predictions.to_csv(f"{DATA_DIR}/monthly_predictions_cleaned.csv", index=False)
+weekly_results.to_csv(f"{RESULTS_DIR}/weekly_backtest_cleaned.csv", index=False)
+monthly_results.to_csv(f"{RESULTS_DIR}/monthly_backtest_cleaned.csv", index=False)
+weekly_predictions.to_csv(f"{RESULTS_DIR}/weekly_predictions_cleaned.csv", index=False)
+monthly_predictions.to_csv(f"{RESULTS_DIR}/monthly_predictions_cleaned.csv", index=False)
 
 print("結果を保存しました:")
 print(f"  - weekly_backtest_cleaned.csv")

@@ -8,7 +8,9 @@ import pandas as pd
 import numpy as np
 
 # データファイルのパス
-DATA_DIR = "/home/user/gci_2025_winter/AirREGI"
+BASE_DIR = "/home/user/gci_2025_winter/AirREGI"
+RAW_DATA_DIR = f"{BASE_DIR}/data/raw"
+PROCESSED_DATA_DIR = f"{BASE_DIR}/data/processed"
 
 # 1. データの読み込み
 print("=" * 60)
@@ -16,21 +18,21 @@ print("1. データの読み込み")
 print("=" * 60)
 
 # コール件数（目的変数）
-call_df = pd.read_csv(f"{DATA_DIR}/regi_call_data_transform.csv")
+call_df = pd.read_csv(f"{RAW_DATA_DIR}/regi_call_data_transform.csv")
 call_df['cdr_date'] = pd.to_datetime(call_df['cdr_date'])
 print(f"\n[コール件数] regi_call_data_transform.csv")
 print(f"  期間: {call_df['cdr_date'].min()} ～ {call_df['cdr_date'].max()}")
 print(f"  行数: {len(call_df)}")
 
 # アカウント取得数
-acc_df = pd.read_csv(f"{DATA_DIR}/regi_acc_get_data_transform.csv")
+acc_df = pd.read_csv(f"{RAW_DATA_DIR}/regi_acc_get_data_transform.csv")
 acc_df['cdr_date'] = pd.to_datetime(acc_df['cdr_date'])
 print(f"\n[アカウント取得数] regi_acc_get_data_transform.csv")
 print(f"  期間: {acc_df['cdr_date'].min()} ～ {acc_df['cdr_date'].max()}")
 print(f"  行数: {len(acc_df)}")
 
 # カレンダーデータ
-cal_df = pd.read_csv(f"{DATA_DIR}/calender_data.csv")
+cal_df = pd.read_csv(f"{RAW_DATA_DIR}/calender_data.csv")
 cal_df['cdr_date'] = pd.to_datetime(cal_df['cdr_date'])
 # holiday_nameのNAを空文字に変換（祝日名は無視するため）
 cal_df['holiday_name'] = cal_df['holiday_name'].replace('NA', np.nan)
@@ -39,14 +41,14 @@ print(f"  期間: {cal_df['cdr_date'].min()} ～ {cal_df['cdr_date'].max()}")
 print(f"  行数: {len(cal_df)}")
 
 # キャンペーンデータ
-cm_df = pd.read_csv(f"{DATA_DIR}/cm_data.csv")
+cm_df = pd.read_csv(f"{RAW_DATA_DIR}/cm_data.csv")
 cm_df['cdr_date'] = pd.to_datetime(cm_df['cdr_date'])
 print(f"\n[キャンペーン] cm_data.csv")
 print(f"  期間: {cm_df['cdr_date'].min()} ～ {cm_df['cdr_date'].max()}")
 print(f"  行数: {len(cm_df)}")
 
 # Google Trendsデータ（週次）
-gt_df = pd.read_csv(f"{DATA_DIR}/gt_service_name.csv")
+gt_df = pd.read_csv(f"{RAW_DATA_DIR}/gt_service_name.csv")
 gt_df['week'] = pd.to_datetime(gt_df['week'])
 print(f"\n[Google Trends（週次）] gt_service_name.csv")
 print(f"  期間: {gt_df['week'].min()} ～ {gt_df['week'].max()}")
@@ -177,7 +179,7 @@ print("\n" + "=" * 60)
 print("8. マージ済みデータの保存")
 print("=" * 60)
 
-output_path = f"{DATA_DIR}/merged_call_data.csv"
+output_path = f"{PROCESSED_DATA_DIR}/merged_call_data.csv"
 merged_df.to_csv(output_path, index=False)
 print(f"  保存先: {output_path}")
 print(f"  行数: {len(merged_df)}, カラム数: {len(merged_df.columns)}")
@@ -187,7 +189,7 @@ merged_df_numeric = merged_df.copy()
 merged_df_numeric['day_before_holiday_flag'] = merged_df_numeric['day_before_holiday_flag'].map({'TRUE': 1, 'FALSE': 0, True: 1, False: 0})
 merged_df_numeric['holiday_flag'] = merged_df_numeric['holiday_flag'].map({'TRUE': 1, 'FALSE': 0, True: 1, False: 0})
 
-output_path_numeric = f"{DATA_DIR}/merged_call_data_numeric.csv"
+output_path_numeric = f"{PROCESSED_DATA_DIR}/merged_call_data_numeric.csv"
 merged_df_numeric.to_csv(output_path_numeric, index=False)
 print(f"  保存先（フラグを数値化）: {output_path_numeric}")
 
