@@ -178,7 +178,7 @@ def create_features_for_prediction(df, forecast_horizon):
     # 使用する特徴量カラム
     feature_cols = [
         'dow', 'month', 'day', 'week_of_year',
-        'cm_flg', 'day_before_holiday_flag', 'is_after_long_holiday',
+        'cm_flg', 'day_before_holiday_flag',
         f'call_lag_{forecast_horizon}', f'call_lag_{forecast_horizon+1}',
         f'call_lag_{forecast_horizon+2}', f'call_lag_{forecast_horizon+3}',
         f'call_lag_{forecast_horizon+4}',
